@@ -53,6 +53,11 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(o => o.AddPolicy("Frontend", p =>
+    p.WithOrigins("https://campuseats-it24103186.vercel.app", "http://localhost:5173")
+     .AllowAnyHeader()
+     .AllowAnyMethod()));
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -76,6 +81,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("Frontend");
 
 app.UseAuthentication(); // who are you? (validates JWT)
 app.UseAuthorization();  // may you? (checks roles)
